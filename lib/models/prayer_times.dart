@@ -80,18 +80,26 @@ class PrayerTimesModel {
   String getTimeUntilIftar() {
     final now = DateTime.now();
     
-    if (now.isBefore(maghrib)) {
+    // Check if sahur (fajr) has passed
+    if (now.isBefore(fajr)) {
+      // Show time until sahur
+      final difference = fajr.difference(now);
+      final hours = difference.inHours;
+      final minutes = difference.inMinutes % 60;
+      return 'Sahura kalan süre: $hours saat ${minutes.toString().padLeft(2, '0')} dakika';
+    } else if (now.isBefore(maghrib)) {
+      // Show time until iftar
       final difference = maghrib.difference(now);
       final hours = difference.inHours;
       final minutes = difference.inMinutes % 60;
-      return '$hours saat ${minutes.toString().padLeft(2, '0')} dakika';
+      return 'İftara kalan süre: $hours saat ${minutes.toString().padLeft(2, '0')} dakika';
     } else {
-      // If iftar has passed, calculate time until next day's iftar
-      final tomorrowMaghrib = maghrib.add(const Duration(days: 1));
-      final difference = tomorrowMaghrib.difference(now);
+      // If iftar has passed, calculate time until next day's sahur
+      final tomorrowFajr = fajr.add(const Duration(days: 1));
+      final difference = tomorrowFajr.difference(now);
       final hours = difference.inHours;
       final minutes = difference.inMinutes % 60;
-      return '$hours saat ${minutes.toString().padLeft(2, '0')} dakika';
+      return 'Sahura kalan süre: $hours saat ${minutes.toString().padLeft(2, '0')} dakika';
     }
   }
 

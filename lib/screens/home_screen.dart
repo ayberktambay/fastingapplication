@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import '../providers/prayer_times_provider.dart';
-import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
-import '../widgets/language_selector.dart';
-import '../widgets/prayer_time_card.dart';
 import '../models/city.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -212,10 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            'Remaining Time'.i18n(),
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
+                       
                           Text(
                             prayerTimes.getTimeUntilIftar(),
                             style: Theme.of(context).textTheme.titleLarge,
