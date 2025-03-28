@@ -1,3 +1,3 @@
-# fastingapp
+# iftarvakti
 
 A new Flutter project.

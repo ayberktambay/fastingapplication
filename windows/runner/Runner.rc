@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "fastingapp" "\0"
+            VALUE "FileDescription", "iftarvakti" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "fastingapp" "\0"
+            VALUE "InternalName", "iftarvakti" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "fastingapp.exe" "\0"
-            VALUE "ProductName", "fastingapp" "\0"
+            VALUE "OriginalFilename", "iftarvakti.exe" "\0"
+            VALUE "ProductName", "iftarvakti" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

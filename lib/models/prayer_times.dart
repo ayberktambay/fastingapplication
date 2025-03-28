@@ -18,15 +18,17 @@ class PrayerTimesModel {
     required this.isha,
   });
 
+  
+
   Prayer? nextPrayer() {
-    final now = DateTime.now();
+    final now = DateTime.now(); // Adjust current time to UTC+3
     final prayers = [
-      (Prayer.fajr, fajr),
-      (Prayer.sunrise, sunrise),
-      (Prayer.dhuhr, dhuhr),
-      (Prayer.asr, asr),
-      (Prayer.maghrib, maghrib),
-      (Prayer.isha, isha),
+      (Prayer.fajr, (fajr)),
+      (Prayer.sunrise, (sunrise)),
+      (Prayer.dhuhr, (dhuhr)),
+      (Prayer.asr, (asr)),
+      (Prayer.maghrib, (maghrib)),
+      (Prayer.isha, (isha)),
     ];
 
     for (var prayer in prayers) {
@@ -40,25 +42,32 @@ class PrayerTimesModel {
   DateTime? timeForPrayer(Prayer prayer) {
     switch (prayer) {
       case Prayer.fajr:
-        return fajr;
+        return (fajr);
       case Prayer.sunrise:
-        return sunrise;
+        return (sunrise);
       case Prayer.dhuhr:
-        return dhuhr;
+        return (dhuhr);
       case Prayer.asr:
-        return asr;
+        return (asr);
       case Prayer.maghrib:
-        return maghrib;
+        return (maghrib);
       case Prayer.isha:
-        return isha;
+        return (isha);
       default:
         return null;
     }
   }
 
   String getTimeUntilNextPrayer() {
-    final now = DateTime.now();
-    final prayers = [fajr, sunrise, dhuhr, asr, maghrib, isha];
+    final now = DateTime.now();// Adjust current time to UTC+3
+    final prayers = [
+      (fajr),
+      (sunrise),
+      (dhuhr),
+      (asr),
+      (maghrib),
+      (isha),
+    ];
     
     for (var prayer in prayers) {
       if (prayer.isAfter(now)) {
@@ -70,7 +79,7 @@ class PrayerTimesModel {
     }
     
     // If no next prayer found, return time until next day's fajr
-    final tomorrowFajr = fajr.add(const Duration(days: 1));
+    final tomorrowFajr = (fajr).add(const Duration(days: 1));
     final difference = tomorrowFajr.difference(now);
     final hours = difference.inHours;
     final minutes = difference.inMinutes % 60;
@@ -78,24 +87,26 @@ class PrayerTimesModel {
   }
 
   String getTimeUntilIftar() {
-    final now = DateTime.now();
+    final now = DateTime.now(); // Adjust current time to UTC+3
+    final fajrTime = (fajr);
+    final maghribTime = (maghrib);
     
     // Check if sahur (fajr) has passed
-    if (now.isBefore(fajr)) {
+    if (now.isBefore(fajrTime)) {
       // Show time until sahur
-      final difference = fajr.difference(now);
+      final difference = fajrTime.difference(now);
       final hours = difference.inHours;
       final minutes = difference.inMinutes % 60;
       return 'Sahura kalan süre: $hours saat ${minutes.toString().padLeft(2, '0')} dakika';
-    } else if (now.isBefore(maghrib)) {
+    } else if (now.isBefore(maghribTime)) {
       // Show time until iftar
-      final difference = maghrib.difference(now);
+      final difference = maghribTime.difference(now);
       final hours = difference.inHours;
       final minutes = difference.inMinutes % 60;
       return 'İftara kalan süre: $hours saat ${minutes.toString().padLeft(2, '0')} dakika';
     } else {
       // If iftar has passed, calculate time until next day's sahur
-      final tomorrowFajr = fajr.add(const Duration(days: 1));
+      final tomorrowFajr = fajrTime.add(const Duration(days: 1));
       final difference = tomorrowFajr.difference(now);
       final hours = difference.inHours;
       final minutes = difference.inMinutes % 60;
@@ -104,6 +115,6 @@ class PrayerTimesModel {
   }
 
   String formatTime(DateTime time) {
-    return DateFormat('HH:mm').format(time);
+    return DateFormat('HH:mm').format((time));
   }
 } 

@@ -1,5 +1,5 @@
-import 'package:fastingapp/localizations/app_localizations.dart';
-import 'package:fastingapp/screens/main_screen.dart';
+import 'package:iftarvakti/localizations/app_localizations.dart';
+import 'package:iftarvakti/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

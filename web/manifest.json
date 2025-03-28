@@ -1,6 +1,6 @@
 {
-    "name": "fastingapp",
-    "short_name": "fastingapp",
+    "name": "iftarvakti",
+    "short_name": "iftarvakti",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

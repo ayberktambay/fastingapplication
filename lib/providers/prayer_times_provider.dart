@@ -58,27 +58,7 @@ class PrayerTimesProvider with ChangeNotifier {
     await fetchPrayerTimes();
   }
 
-  DateTime _adjustToIstanbulTime(DateTime time) {
-    // Convert UTC to Istanbul time (UTC+3)
-    return time.add(const Duration(hours: 3));
-  }
 
-  DateTime _adjustTimeForDiyanet(DateTime time, Prayer prayer) {
-    if (!_isDiyanetMode) return time;
-
-    switch (prayer) {
-      case Prayer.fajr:
-        return time.add(const Duration(minutes: 6));
-      case Prayer.sunrise:
-        return time.add(const Duration(minutes: 3));
-      case Prayer.dhuhr:
-        return time.add(const Duration(minutes: 4));
-      case Prayer.maghrib:
-        return time.add(const Duration(minutes: 6));
-      default:
-        return time;
-    }
-  }
 
   Future<void> fetchPrayerTimes() async {
     _isLoading = true;
@@ -95,12 +75,12 @@ class PrayerTimesProvider with ChangeNotifier {
       final prayerTimes = PrayerTimes(coordinates, date, params);
       
       _prayerTimes = PrayerTimesModel(
-        fajr: _adjustToIstanbulTime(prayerTimes.fajr!),
-        sunrise: _adjustToIstanbulTime(prayerTimes.sunrise!),
-        dhuhr: _adjustToIstanbulTime(prayerTimes.dhuhr!),
-        asr: _adjustToIstanbulTime(prayerTimes.asr!),
-        maghrib: _adjustToIstanbulTime(prayerTimes.maghrib!),
-        isha: _adjustToIstanbulTime(prayerTimes.isha!),
+        fajr: (prayerTimes.fajr!),
+        sunrise: (prayerTimes.sunrise!),
+        dhuhr: (prayerTimes.dhuhr!),
+        asr: (prayerTimes.asr!),
+        maghrib: (prayerTimes.maghrib!),
+        isha: (prayerTimes.isha!),
       );
     } catch (e) {
       _error = 'Namaz vakitleri alınamadı: ${e.toString()}';
@@ -119,8 +99,7 @@ class PrayerTimesProvider with ChangeNotifier {
     final time = _prayerTimes!.timeForPrayer(nextPrayer);
     if (time == null) return '--:--';
     
-    final adjustedTime = _adjustTimeForDiyanet(time, nextPrayer);
-    return '${adjustedTime.hour.toString().padLeft(2, '0')}:${adjustedTime.minute.toString().padLeft(2, '0')}';
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 
   String getPrayerTime(Prayer prayer) {
@@ -128,8 +107,7 @@ class PrayerTimesProvider with ChangeNotifier {
     final time = _prayerTimes!.timeForPrayer(prayer);
     if (time == null) return '--:--';
     
-    final adjustedTime = _adjustTimeForDiyanet(time, prayer);
-    return '${adjustedTime.hour.toString().padLeft(2, '0')}:${adjustedTime.minute.toString().padLeft(2, '0')}';
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 
   Duration getTimeUntilNextPrayer() {
@@ -141,7 +119,6 @@ class PrayerTimesProvider with ChangeNotifier {
     final nextPrayerTime = _prayerTimes!.timeForPrayer(nextPrayer);
     if (nextPrayerTime == null) return Duration.zero;
     
-    final adjustedTime = _adjustTimeForDiyanet(nextPrayerTime, nextPrayer);
-    return adjustedTime.difference(DateTime.now());
+    return nextPrayerTime.difference(DateTime.now());
   }
 } 
