@@ -3,6 +3,7 @@ import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import '../providers/prayer_times_provider.dart';
 import '../providers/language_provider.dart';
+import '../providers/theme_provider.dart';
 import '../widgets/language_selector.dart';
 import '../widgets/prayer_time_card.dart';
 import '../models/city.dart';
@@ -67,8 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -86,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             city.name,
                             style: TextStyle(
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              color: isSelected ? Colors.green : Colors.black87,
+                              color: isSelected ? Colors.green : Theme.of(context).textTheme.bodyLarge?.color,
                             ),
                           ),
                           onTap: () {
@@ -109,6 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('İftar Vakti'.i18n()),
@@ -116,18 +117,21 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               height: 50,
               width: 50,
-          margin: const EdgeInsets.only(right: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(360),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade300,Colors.blue.shade700])
-          ),
-          child: IconButton(onPressed: () => _showCitySelector(context),icon: Icon(Icons.location_on,color: Colors.white)))
+              margin: const EdgeInsets.only(right: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(360),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.blue.shade300,Colors.blue.shade700])
+              ),
+              child: IconButton(
+                onPressed: () => _showCitySelector(context),
+                icon: const Icon(Icons.location_on,color: Colors.white)
+              )
+            )
         ],
       ),
-      backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: Consumer<PrayerTimesProvider>(
           builder: (context, provider, child) {
@@ -141,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(
                 child: Text(
                   provider.error,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                   textAlign: TextAlign.center,
                 ),
               );
@@ -153,17 +157,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.refresh,
                       size: 48,
-                      color: Colors.grey,
+                      color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.5),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'Failed to load prayer times'.i18n(),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: Colors.grey[600],
-                          ),
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
                     ElevatedButton.icon(
@@ -188,11 +190,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       margin: const EdgeInsets.all(12),
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:  BorderRadius.circular(15),
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(15),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: isDarkMode 
+                              ? Colors.black26
+                              : Colors.black.withOpacity(0.1),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -219,17 +223,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           'Prayer Times'.i18n(),
-                          style: Theme.of(context).textTheme.displaySmall,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8),
                     GridView.count(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -308,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -345,7 +349,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     prayerName,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Colors.black87,
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
                         ),
@@ -416,4 +419,4 @@ class _HomeScreenState extends State<HomeScreen> {
         return Icons.access_time;
     }
   }
-} 
+}

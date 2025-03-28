@@ -3,7 +3,7 @@
   "settings": "Settings",
   "general_settings": "General Settings",
   "display_and_sound": "Display & Sound",
-  "About us": "About",
+  "About us": "About us",
   "language": "Language",
   "notifications": "Notifications",
   "theme": "Theme",
@@ -28,5 +28,6 @@
   "Dhuhr": "Dhuhr",
   "Asr": "Asr",
   "Maghrib": "Maghrib",
-  "Isha": "Isha"
+  "Isha": "Isha",
+  "developer": "Developer"
 }
