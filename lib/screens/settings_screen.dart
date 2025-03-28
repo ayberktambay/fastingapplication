@@ -12,6 +12,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+    final prayerTimesProvider = Provider.of<PrayerTimesProvider>(context);
     
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.grey[900] : Colors.grey[100],
@@ -51,14 +52,44 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            _buildSection(
-              context,
-              title: 'display_and_sound'.i18n(),
-              children: [
-                Consumer<ThemeProvider>(
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: isDarkMode 
+                        ? Colors.orange.withOpacity(0.15)
+                        : Colors.orange.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Icon(
+                      Icons.sync,
+                      color: Colors.orange,
+                      size: 24,
+                    ),
+                  ),
+                  title: Text(
+                    'diyanet_sync_mode'.i18n(),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: isDarkMode ? Colors.white : Colors.black87,
+                        ),
+                  ),
+                  subtitle: Text(
+                    'diyanet_sync_mode_description'.i18n(),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                        ),
+                  ),
+                  trailing: Switch.adaptive(
+                    value: prayerTimesProvider.isDiyanetMode,
+                    onChanged: (value) => prayerTimesProvider.toggleDiyanetMode(),
+                    activeColor: Colors.orange,
+                    activeTrackColor: Colors.orange.withOpacity(0.3),
+                    inactiveThumbColor: Colors.grey[400],
+                    inactiveTrackColor: Colors.grey[300],
+                  ),
+                ),
+                 Consumer<ThemeProvider>(
                   builder: (context, themeProvider, child) {
                     return ListTile(
                       leading: Container(
@@ -101,9 +132,10 @@ class SettingsScreen extends StatelessWidget {
                     );
                   },
                 ),
-               
+            
               ],
             ),
+           
             const SizedBox(height: 24),
             _buildSection(
               context,

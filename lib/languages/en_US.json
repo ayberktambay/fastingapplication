@@ -29,5 +29,7 @@
   "Asr": "Asr",
   "Maghrib": "Maghrib",
   "Isha": "Isha",
-  "developer": "Developer"
+  "developer": "Developer",
+  "diyanet_sync_mode": "Diyanet Sync Mode",
+  "diyanet_sync_mode_description": "Use Diyanet prayer times instead of global calculation"
 }

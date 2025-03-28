@@ -1,3 +1,4 @@
+import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
 
 class PrayerTimesModel {
@@ -16,6 +17,44 @@ class PrayerTimesModel {
     required this.maghrib,
     required this.isha,
   });
+
+  Prayer? nextPrayer() {
+    final now = DateTime.now();
+    final prayers = [
+      (Prayer.fajr, fajr),
+      (Prayer.sunrise, sunrise),
+      (Prayer.dhuhr, dhuhr),
+      (Prayer.asr, asr),
+      (Prayer.maghrib, maghrib),
+      (Prayer.isha, isha),
+    ];
+
+    for (var prayer in prayers) {
+      if (prayer.$2.isAfter(now)) {
+        return prayer.$1;
+      }
+    }
+    return Prayer.fajr;
+  }
+
+  DateTime? timeForPrayer(Prayer prayer) {
+    switch (prayer) {
+      case Prayer.fajr:
+        return fajr;
+      case Prayer.sunrise:
+        return sunrise;
+      case Prayer.dhuhr:
+        return dhuhr;
+      case Prayer.asr:
+        return asr;
+      case Prayer.maghrib:
+        return maghrib;
+      case Prayer.isha:
+        return isha;
+      default:
+        return null;
+    }
+  }
 
   String getTimeUntilNextPrayer() {
     final now = DateTime.now();

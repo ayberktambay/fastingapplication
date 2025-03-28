@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
 
-            if (provider.error.isNotEmpty) {
+            if (provider.error!.isNotEmpty) {
               return Center(
                 child: Text(
                   provider.error,

@@ -65,5 +65,7 @@
   "Asr": "İkindi",
   "Maghrib": "Akşam",
   "Isha": "Yatsı",
-  "developer": "Geliştirici"
+  "developer": "Geliştirici",
+  "diyanet_sync_mode": "Diyanet Senkronizasyon Modu",
+  "diyanet_sync_mode_description": "Küresel hesaplama yerine Diyanet namaz vakitlerini kullan"
 }
