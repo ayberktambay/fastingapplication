@@ -14,16 +14,20 @@ class LanguageProvider extends ChangeNotifier {
   Future<void> _loadSavedLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     final savedLanguage = prefs.getString(_languageKey) ?? 'tr';
-    _currentLocale = Locale(savedLanguage);
-    notifyListeners();
+    setLanguage(savedLanguage);
   }
 
-  void setLanguage(String languageCode) {
+  Future<void> setLanguage(String languageCode) async {
     if (languageCode == 'tr') {
       _currentLocale = const Locale('tr', 'TR');
     } else if (languageCode == 'en') {
       _currentLocale = const Locale('en', 'US');
     }
+    
+    // Save the selected language
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_languageKey, languageCode);
+    
     notifyListeners();
   }
 } 

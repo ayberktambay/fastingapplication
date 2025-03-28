@@ -225,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           'Prayer Times'.i18n(),
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                       ],
                     ),
@@ -237,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 8,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      childAspectRatio: 0.85,
+                      childAspectRatio: 0.75,
                       children: [
                         _buildPrayerCard(
                           context,
@@ -324,12 +324,12 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(16),
           onTap: () {},
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(8),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
@@ -337,43 +337,56 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Icon(
                     _getPrayerIcon(prayerName),
                     color: color,
-                    size: 20,
+                    size: 18,
                   ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  prayerName,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w600,
-                      ),
-                  textAlign: TextAlign.center,
+                const SizedBox(height: 4),
+                Flexible(
+                  child: Text(
+                    prayerName,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  time,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: color,
-                        fontWeight: FontWeight.w600,
-                      ),
+                Flexible(
+                  child: Text(
+                    time,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: color,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 if (isNext) ...[
                   const SizedBox(height: 2),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
+                      horizontal: 4,
                       vertical: 1,
                     ),
                     decoration: BoxDecoration(
                       color: color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       'Next'.i18n(),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: color,
                             fontWeight: FontWeight.w500,
+                            fontSize: 12,
                           ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
