@@ -1,4 +1,3 @@
-import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
 
 class PrayerTimesModel {

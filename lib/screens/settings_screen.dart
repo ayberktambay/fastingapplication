@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import '../providers/prayer_times_provider.dart';
+import 'language_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -14,7 +16,7 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           children: [
             Text(
-              'Ayarlar',
+              'settings'.i18n(),
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
@@ -23,62 +25,32 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24),
             _buildSection(
               context,
-              title: 'Genel Ayarlar',
+              title: 'general_settings'.i18n(),
               children: [
-                _buildSettingTile(
-                  context,
-                  icon: Icons.notifications_outlined,
-                  title: 'Bildirimler',
-                  subtitle: 'Namaz vakitleri için bildirimleri yönetin',
-                  onTap: () {},
-                ),
                 _buildSettingTile(
                   context,
                   icon: Icons.language,
-                  title: 'Dil',
-                  subtitle: 'Uygulama dilini değiştirin',
-                  onTap: () {},
+                  title: 'language'.i18n(),
+                  subtitle: 'Change application language'.i18n(),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LanguageScreen(),
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 24),
             _buildSection(
               context,
-              title: 'Görünüm',
-              children: [
-                _buildSettingTile(
-                  context,
-                  icon: Icons.palette_outlined,
-                  title: 'Tema',
-                  subtitle: 'Uygulama temasını değiştirin',
-                  onTap: () {},
-                ),
-                _buildSettingTile(
-                  context,
-                  icon: Icons.text_fields,
-                  title: 'Yazı Boyutu',
-                  subtitle: 'Uygulama yazı boyutunu ayarlayın',
-                  onTap: () {},
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            _buildSection(
-              context,
-              title: 'Hakkında',
+              title: 'About us'.i18n(),
               children: [
                 _buildSettingTile(
                   context,
                   icon: Icons.info_outline,
-                  title: 'Uygulama Bilgisi',
-                  subtitle: 'Versiyon ve diğer bilgiler',
-                  onTap: () {},
-                ),
-                _buildSettingTile(
-                  context,
-                  icon: Icons.privacy_tip_outlined,
-                  title: 'Gizlilik Politikası',
-                  subtitle: 'Gizlilik politikasını görüntüleyin',
+                  title: 'App Information'.i18n(),
+                  subtitle: 'Version and other information'.i18n(),
                   onTap: () {},
                 ),
               ],

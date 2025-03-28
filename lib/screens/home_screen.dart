@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import '../providers/prayer_times_provider.dart';
+import '../providers/language_provider.dart';
+import '../widgets/language_selector.dart';
 import '../widgets/prayer_time_card.dart';
 import '../models/city.dart';
 
@@ -13,6 +16,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // Ekran yüklendiğinde namaz vakitlerini getir
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<PrayerTimesProvider>(context, listen: false).fetchPrayerTimes();
+    });
+  }
 
   List<City> _getFilteredCities() {
     if (_searchQuery.isEmpty) {
@@ -37,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Text(
-                    'Şehir Seçin',
+                    'select_city'.i18n(),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -50,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       });
                     },
                     decoration: InputDecoration(
-                      hintText: 'Şehir ara...',
+                      hintText: 'search'.i18n(),
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -98,6 +110,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('İftar Vakti'.i18n()),
+        actions: [
+            Container(
+              height: 50,
+              width: 50,
+          margin: const EdgeInsets.only(right: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(360),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.shade300,Colors.blue.shade700])
+          ),
+          child: IconButton(onPressed: () => _showCitySelector(context),icon: Icon(Icons.location_on,color: Colors.white)))
+        ],
+      ),
       backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: Consumer<PrayerTimesProvider>(
@@ -120,8 +149,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
             final prayerTimes = provider.prayerTimes;
             if (prayerTimes == null) {
-              return const Center(
-                child: Text('Namaz vakitleri mevcut değil'),
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.refresh,
+                      size: 48,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Failed to load prayer times'.i18n(),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Colors.grey[600],
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: () => provider.fetchPrayerTimes(),
+                      icon: const Icon(Icons.refresh),
+                      label: Text('Try Again'.i18n()),
+                    ),
+                  ],
+                ),
               );
             }
 
@@ -157,10 +208,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                            Text(
-                                'İftara Kalan Süre',
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
+                          Text(
+                            'Remaining Time'.i18n(),
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                           Text(
                             prayerTimes.getTimeUntilIftar(),
                             style: Theme.of(context).textTheme.titleLarge,
@@ -173,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Namaz Vakitleri',
+                          'Prayer Times'.i18n(),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
@@ -190,14 +241,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         _buildPrayerCard(
                           context,
-                          prayerName: 'İmsak',
+                          prayerName: 'Fajr'.i18n(),
                           time: prayerTimes.formatTime(prayerTimes.fajr),
                           isNext: DateTime.now().isBefore(prayerTimes.fajr),
                           color: Colors.blue,
                         ),
                         _buildPrayerCard(
                           context,
-                          prayerName: 'Güneş',
+                          prayerName: 'Sunrise'.i18n(),
                           time: prayerTimes.formatTime(prayerTimes.sunrise),
                           isNext: DateTime.now().isBefore(prayerTimes.sunrise) &&
                               DateTime.now().isAfter(prayerTimes.fajr),
@@ -205,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         _buildPrayerCard(
                           context,
-                          prayerName: 'Öğle',
+                          prayerName: 'Dhuhr'.i18n(),
                           time: prayerTimes.formatTime(prayerTimes.dhuhr),
                           isNext: DateTime.now().isBefore(prayerTimes.dhuhr) &&
                               DateTime.now().isAfter(prayerTimes.sunrise),
@@ -213,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         _buildPrayerCard(
                           context,
-                          prayerName: 'İkindi',
+                          prayerName: 'Asr'.i18n(),
                           time: prayerTimes.formatTime(prayerTimes.asr),
                           isNext: DateTime.now().isBefore(prayerTimes.asr) &&
                               DateTime.now().isAfter(prayerTimes.dhuhr),
@@ -221,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         _buildPrayerCard(
                           context,
-                          prayerName: 'Akşam',
+                          prayerName: 'Maghrib'.i18n(),
                           time: prayerTimes.formatTime(prayerTimes.maghrib),
                           isNext: DateTime.now().isBefore(prayerTimes.maghrib) &&
                               DateTime.now().isAfter(prayerTimes.asr),
@@ -229,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         _buildPrayerCard(
                           context,
-                          prayerName: 'Yatsı',
+                          prayerName: 'Isha'.i18n(),
                           time: prayerTimes.formatTime(prayerTimes.isha),
                           isNext: DateTime.now().isBefore(prayerTimes.isha) &&
                               DateTime.now().isAfter(prayerTimes.maghrib),
@@ -318,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'Sıradaki',
+                      'Next'.i18n(),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: color,
                             fontWeight: FontWeight.w500,
@@ -336,17 +387,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   IconData _getPrayerIcon(String prayerName) {
     switch (prayerName) {
-      case 'İmsak':
+      case 'Fajr':
         return Icons.nightlight_round;
-      case 'Güneş':
+      case 'Sunrise':
         return Icons.wb_sunny_rounded;
-      case 'Öğle':
+      case 'Dhuhr':
         return Icons.wb_sunny_outlined;
-      case 'İkindi':
+      case 'Asr':
         return Icons.wb_sunny;
-      case 'Akşam':
+      case 'Maghrib':
         return Icons.nights_stay_rounded;
-      case 'Yatsı':
+      case 'Isha':
         return Icons.nightlight_round;
       default:
         return Icons.access_time;
