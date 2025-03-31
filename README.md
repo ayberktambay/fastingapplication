@@ -1,3 +1,2 @@
-# namaz_vakti
-
-A new Flutter project.
+# Prayer application
+A free and minimal application that allows easy tracking of prayer times.
