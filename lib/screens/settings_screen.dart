@@ -1,4 +1,4 @@
-import 'package:iftarvakti/screens/about_screen.dart';
+import 'package:namaz_vakti/screens/about_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';

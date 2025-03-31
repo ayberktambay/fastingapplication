@@ -10,7 +10,7 @@ class PrayerTimesProvider with ChangeNotifier {
   bool _isLoading = false;
   String _error = '';
   City _selectedCity = City.cities.first;
-  bool _isDiyanetMode = false;
+  bool _isDiyanetMode = true;
 
   PrayerTimesModel? get prayerTimes => _prayerTimes;
   bool get isLoading => _isLoading;
@@ -46,7 +46,7 @@ class PrayerTimesProvider with ChangeNotifier {
 
   Future<void> _loadDiyanetMode() async {
     final prefs = await SharedPreferences.getInstance();
-    _isDiyanetMode = prefs.getBool('isDiyanetMode') ?? false;
+    _isDiyanetMode = prefs.getBool('isDiyanetMode') ?? true;
     notifyListeners();
   }
 
@@ -75,12 +75,12 @@ class PrayerTimesProvider with ChangeNotifier {
       final prayerTimes = PrayerTimes(coordinates, date, params);
       
       _prayerTimes = PrayerTimesModel(
-        fajr: (prayerTimes.fajr!),
-        sunrise: (prayerTimes.sunrise!),
-        dhuhr: (prayerTimes.dhuhr!),
-        asr: (prayerTimes.asr!),
-        maghrib: (prayerTimes.maghrib!),
-        isha: (prayerTimes.isha!),
+        fajr: (prayerTimes.fajr),
+        sunrise: (prayerTimes.sunrise),
+        dhuhr: (prayerTimes.dhuhr),
+        asr: (prayerTimes.asr),
+        maghrib: (prayerTimes.maghrib),
+        isha: (prayerTimes.isha),
       );
     } catch (e) {
       _error = 'Namaz vakitleri alınamadı: ${e.toString()}';

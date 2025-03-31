@@ -1,6 +1,6 @@
 {
-    "name": "iftarvakti",
-    "short_name": "iftarvakti",
+    "name": "namaz_vakti",
+    "short_name": "namaz_vakti",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

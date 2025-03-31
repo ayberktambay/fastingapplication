@@ -59,31 +59,30 @@ class PrayerTimesModel {
   }
 
   String getTimeUntilNextPrayer() {
-    final now = DateTime.now();// Adjust current time to UTC+3
-    final prayers = [
-      (fajr),
-      (sunrise),
-      (dhuhr),
-      (asr),
-      (maghrib),
-      (isha),
-    ];
-    
-    for (var prayer in prayers) {
-      if (prayer.isAfter(now)) {
-        final difference = prayer.difference(now);
+    final now = DateTime.now(); 
+    final nextPrayer = this.nextPrayer();
+    if (nextPrayer != null) {
+      final nextPrayerTime = timeForPrayer(nextPrayer);
+      if (nextPrayerTime != null) {
+        final difference = nextPrayerTime.difference(now);
         final hours = difference.inHours;
         final minutes = difference.inMinutes % 60;
-        return '$hours:${minutes.toString().padLeft(2, '0')}';
+
+        // Map prayer names to their Turkish equivalents
+        final prayerNames = {
+          Prayer.fajr: 'İmsak',
+          Prayer.sunrise: 'Güneş',
+          Prayer.dhuhr: 'Öğle',
+          Prayer.asr: 'İkindi',
+          Prayer.maghrib: 'Akşam',
+          Prayer.isha: 'Yatsı',
+        };
+
+        final prayerName = prayerNames[nextPrayer] ?? 'Bilinmeyen';
+        return '$prayerName: $hours saat ${minutes.toString().padLeft(2, '0')} dakika sonra';
       }
     }
-    
-    // If no next prayer found, return time until next day's fajr
-    final tomorrowFajr = (fajr).add(const Duration(days: 1));
-    final difference = tomorrowFajr.difference(now);
-    final hours = difference.inHours;
-    final minutes = difference.inMinutes % 60;
-    return '$hours:${minutes.toString().padLeft(2, '0')}';
+    return 'Sıradaki ezan bilgisi bulunamadı';
   }
 
   String getTimeUntilIftar() {
@@ -117,4 +116,4 @@ class PrayerTimesModel {
   String formatTime(DateTime time) {
     return DateFormat('HH:mm').format((time));
   }
-} 
+}

@@ -1,10 +1,74 @@
+
 import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import '../providers/prayer_times_provider.dart';
 import '../providers/theme_provider.dart';
 import '../models/city.dart';
+// import 'package:workmanager/workmanager.dart';
+// import 'dart:math';
+// /// Used for Background Updates using Workmanager Plugin
+// @pragma("vm:entry-point")
+// void callbackDispatcher() async {
+//   Workmanager().executeTask((taskName, inputData) {
+//     final now = DateTime.now();
+//     return Future.wait<bool?>([
+//       HomeWidget.saveWidgetData(
+//         'title',
+//         'Updated from Background',
+//       ),
+//       HomeWidget.saveWidgetData(
+//         'message',
+//         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
+//       ),
+//     ]).then((value) async {
+//       Future.wait<bool?>([
+//         HomeWidget.updateWidget(
+//           name: 'HomeWidgetExampleProvider',
+//           iOSName: 'HomeWidgetExample',
+//         ),
+//         if (Platform.isAndroid)
+//           HomeWidget.updateWidget(
+//             qualifiedAndroidName:
+//                 'es.antonborri.home_widget_example.glance.HomeWidgetReceiver',
+//           ),
+//       ]);
+//       return !value.contains(false);
+//     });
+//   });
+// }
 
+// /// Called when Doing Background Work initiated from Widget
+// @pragma("vm:entry-point")
+// Future<void> interactiveCallback(Uri? data) async {
+//   if (data?.host == 'titleclicked') {
+//     final greetings = [
+//       'Hello',
+//       'Hallo',
+//       'Bonjour',
+//       'Hola',
+//       'Ciao',
+//       '哈洛',
+//       '안녕하세요',
+//       'xin chào',
+//     ];
+//     final selectedGreeting = greetings[Random().nextInt(greetings.length)];
+//     await HomeWidget.setAppGroupId('YOUR_GROUP_ID');
+//     await HomeWidget.saveWidgetData<String>('title', selectedGreeting);
+//     await HomeWidget.updateWidget(
+//       name: 'HomeWidgetExampleProvider',
+//       iOSName: 'HomeWidgetExample',
+//     );
+//     if (Platform.isAndroid) {
+//       await HomeWidget.updateWidget(
+//         qualifiedAndroidName:
+//             'es.antonborri.home_widget_example.glance.HomeWidgetReceiver',
+//       );
+//     }
+//   }
+// }
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -106,10 +170,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    
+    var theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('İftar Vakti'.i18n()),
+        title: Text('Namaz Vakti'.i18n()),
         actions: [
             Container(
               height: 50,
@@ -138,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
 
-            if (provider.error!.isNotEmpty) {
+            if (provider.error.isNotEmpty) {
               return Center(
                 child: Text(
                   provider.error,
@@ -205,13 +269,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () => _showCitySelector(context),
                             child: Text(
                               provider.selectedCity.name,
-                              style: Theme.of(context).textTheme.displayLarge,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                color: theme.textTheme.titleLarge?.color,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 8),
                        
                           Text(
-                            prayerTimes.getTimeUntilIftar(),
+                            prayerTimes.getTimeUntilNextPrayer(),
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],

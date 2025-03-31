@@ -1,23 +1,26 @@
-import 'package:iftarvakti/localizations/app_localizations.dart';
-import 'package:iftarvakti/screens/main_screen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:namaz_vakti/localizations/app_localizations.dart';
+import 'package:namaz_vakti/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
-import 'screens/home_screen.dart';
 import 'providers/prayer_times_provider.dart';
 import 'providers/language_provider.dart';
 import 'providers/theme_provider.dart';
 import 'theme/app_theme.dart';
 
 void main() {
+ WidgetsFlutterBinding.ensureInitialized();
+  //Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
+  runApp(const MaterialApp(home: PrayerApp()));
   // Set the directory for localization files
   LocalJsonLocalization.delegate.directories = ['lib/languages'];
-  runApp(const MyApp());
+  runApp(const PrayerApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class PrayerApp extends StatelessWidget {
+  const PrayerApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
