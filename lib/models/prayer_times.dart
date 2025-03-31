@@ -1,5 +1,7 @@
 import 'package:adhan/adhan.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
 
 class PrayerTimesModel {
   final DateTime fajr;
@@ -17,8 +19,6 @@ class PrayerTimesModel {
     required this.maghrib,
     required this.isha,
   });
-
-  
 
   Prayer? nextPrayer() {
     final now = DateTime.now(); // Adjust current time to UTC+3
@@ -85,6 +85,39 @@ class PrayerTimesModel {
     return 'Sıradaki ezan bilgisi bulunamadı';
   }
 
+  List<dynamic> getTimeUntilNextPrayerWithSeconds() {
+    final now = DateTime.now();
+    final nextPrayer = this.nextPrayer();
+    if (nextPrayer != null) {
+      final nextPrayerTime = timeForPrayer(nextPrayer);
+      if (nextPrayerTime != null) {
+        final difference = nextPrayerTime.difference(now);
+        final hours = difference.inHours;
+        final minutes = difference.inMinutes % 60;
+        final seconds = difference.inSeconds % 60;
+
+        // Map prayer names to their Turkish equivalents
+        final prayerNames = {
+          Prayer.fajr: 'İmsak',
+          Prayer.sunrise: 'Güneş',
+          Prayer.dhuhr: 'Öğle',
+          Prayer.asr: 'İkindi',
+          Prayer.maghrib: 'Akşam',
+          Prayer.isha: 'Yatsı',
+        };
+
+        final prayerName = prayerNames[nextPrayer] ?? 'Bilinmeyen';
+        final time = '$hours saat ${minutes.toString().padLeft(2, '0')} dakika ${seconds.toString().padLeft(2, '0')} saniye sonra';
+        List<dynamic> timeList = [
+          prayerName,
+          time
+        ];
+        return timeList;
+      }
+    }
+    return [];
+  }
+
   String getTimeUntilIftar() {
     final now = DateTime.now(); // Adjust current time to UTC+3
     final fajrTime = (fajr);
@@ -117,3 +150,67 @@ class PrayerTimesModel {
     return DateFormat('HH:mm').format((time));
   }
 }
+
+class PrayerCountdown extends StatefulWidget {
+  final PrayerTimesModel prayerTimes;
+
+  const PrayerCountdown({Key? key, required this.prayerTimes}) : super(key: key);
+
+  @override
+  _PrayerCountdownState createState() => _PrayerCountdownState();
+}
+
+class _PrayerCountdownState extends State<PrayerCountdown> {
+  late String timeUntilNextPrayer;
+  late List<dynamic> data =[];
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    data = widget.prayerTimes.getTimeUntilNextPrayerWithSeconds();
+    startTimer();
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        data = widget.prayerTimes.getTimeUntilNextPrayerWithSeconds();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if(data.isEmpty)
+          const Text(
+            'Sıradaki ezan bilgisi bulunamadı',
+            style: TextStyle(fontSize: 16),
+          )
+        else
+        Column(
+          children: [
+            Text(
+              data[0],
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+             Text(
+          data[1],
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+          ],
+        ),
+       
+      ],
+    );
+  }
+}
+

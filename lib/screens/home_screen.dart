@@ -1,74 +1,11 @@
 
 import 'package:flutter/material.dart';
-// ignore: unused_import
-import 'package:google_fonts/google_fonts.dart';
 import 'package:localization/localization.dart';
+import 'package:namaz_vakti/models/prayer_times.dart';
 import 'package:provider/provider.dart';
 import '../providers/prayer_times_provider.dart';
 import '../providers/theme_provider.dart';
 import '../models/city.dart';
-// import 'package:workmanager/workmanager.dart';
-// import 'dart:math';
-// /// Used for Background Updates using Workmanager Plugin
-// @pragma("vm:entry-point")
-// void callbackDispatcher() async {
-//   Workmanager().executeTask((taskName, inputData) {
-//     final now = DateTime.now();
-//     return Future.wait<bool?>([
-//       HomeWidget.saveWidgetData(
-//         'title',
-//         'Updated from Background',
-//       ),
-//       HomeWidget.saveWidgetData(
-//         'message',
-//         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}',
-//       ),
-//     ]).then((value) async {
-//       Future.wait<bool?>([
-//         HomeWidget.updateWidget(
-//           name: 'HomeWidgetExampleProvider',
-//           iOSName: 'HomeWidgetExample',
-//         ),
-//         if (Platform.isAndroid)
-//           HomeWidget.updateWidget(
-//             qualifiedAndroidName:
-//                 'es.antonborri.home_widget_example.glance.HomeWidgetReceiver',
-//           ),
-//       ]);
-//       return !value.contains(false);
-//     });
-//   });
-// }
-
-// /// Called when Doing Background Work initiated from Widget
-// @pragma("vm:entry-point")
-// Future<void> interactiveCallback(Uri? data) async {
-//   if (data?.host == 'titleclicked') {
-//     final greetings = [
-//       'Hello',
-//       'Hallo',
-//       'Bonjour',
-//       'Hola',
-//       'Ciao',
-//       '哈洛',
-//       '안녕하세요',
-//       'xin chào',
-//     ];
-//     final selectedGreeting = greetings[Random().nextInt(greetings.length)];
-//     await HomeWidget.setAppGroupId('YOUR_GROUP_ID');
-//     await HomeWidget.saveWidgetData<String>('title', selectedGreeting);
-//     await HomeWidget.updateWidget(
-//       name: 'HomeWidgetExampleProvider',
-//       iOSName: 'HomeWidgetExample',
-//     );
-//     if (Platform.isAndroid) {
-//       await HomeWidget.updateWidget(
-//         qualifiedAndroidName:
-//             'es.antonborri.home_widget_example.glance.HomeWidgetReceiver',
-//       );
-//     }
-//   }
-// }
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -278,10 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 8),
                        
-                          Text(
-                            prayerTimes.getTimeUntilNextPrayer(),
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
+                          PrayerCountdown(prayerTimes: prayerTimes),
                         ],
                       ),
                     ),
